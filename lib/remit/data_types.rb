@@ -135,6 +135,7 @@ module Remit
     PAYMENT_METHOD_UNSUPPORTED  = 'NP'  # account doesn't support requested payment method
     INVALID_CALLER    = 'NM'  # you are not a valid 3rd party caller to the transaction
     SUCCESS_RECIPIENT_TOKEN_INSTALLED = 'SR'
+    SUCCESS_NO_CHANGE = 'SU'  # the existing token was not changed
   end
 
   module RequestTypes
