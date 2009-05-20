@@ -104,7 +104,7 @@ module Remit
     FAILURE           = 'Failure'
     INITIATED         = 'Initiated'
     REINITIATED       = 'Reinitiated'
-    Pending           = 'Pending'
+    PENDING           = 'Pending'
   end
 
   class TokenType
