@@ -91,7 +91,7 @@ module Remit
     parameter :status_detail
     parameter :new_sender_token_usage, :type => TokenUsageLimit
 
-    %w(reserved success failure initiated reinitiated temporary_decline).each do |status_name|
+    %w(reserved success failure initiated reinitiated temporary_decline pending).each do |status_name|
       define_method("#{status_name}?") do
         self.status == Remit::TransactionStatus.const_get(status_name.sub('_', '').upcase)
       end
@@ -104,7 +104,7 @@ module Remit
     FAILURE           = 'Failure'
     INITIATED         = 'Initiated'
     REINITIATED       = 'Reinitiated'
-    TEMPORARYDECLINE  = 'TemporaryDecline'
+    Pending           = 'Pending'
   end
 
   class TokenType
@@ -142,11 +142,6 @@ module Remit
     class Amount < Remit::Request
       parameter :amount
       parameter :currency_code
-    end
-
-    class TemporaryDeclinePolicy < Remit::Request
-      parameter :temporary_decline_policy_type
-      parameter :implicit_retry_timeout_in_mins
     end
 
     class DescriptorPolicy < Remit::Request
