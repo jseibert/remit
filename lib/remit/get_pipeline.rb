@@ -72,6 +72,15 @@ module Remit
         uri.query = SignedQuery.new(@api.pipeline_url, @api.secret_key, query).to_s
         uri.to_s
       end
+      
+      def method_missing(method, *args)
+        if self.class.parameters.include?(method.to_sym)
+          self.send(method.to_sym)
+        else
+          super
+        end
+      end
+      
     end
     
     class SingleUsePipeline < Pipeline
@@ -169,7 +178,7 @@ module Remit
     end
 
     def get_recipient_pipeline(options)
-      self.get_pipeline(RecipientPipeline, options)
+      self.get_pipeline(RecipientPipeline, {:version => Date.new(2009, 1, 9).to_s}.merge(options))
     end
     
     def get_recurring_use_pipeline(options)
