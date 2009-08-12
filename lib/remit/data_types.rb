@@ -91,7 +91,7 @@ module Remit
     parameter :status_detail
     parameter :new_sender_token_usage, :type => TokenUsageLimit
 
-    %w(reserved success failure initiated reinitiated temporary_decline).each do |status_name|
+    %w(reserved success failure initiated reinitiated temporary_decline pending).each do |status_name|
       define_method("#{status_name}?") do
         self.status == Remit::TransactionStatus.const_get(status_name.sub('_', '').upcase)
       end
@@ -104,7 +104,7 @@ module Remit
     FAILURE           = 'Failure'
     INITIATED         = 'Initiated'
     REINITIATED       = 'Reinitiated'
-    TEMPORARYDECLINE  = 'TemporaryDecline'
+    PENDING           = 'Pending'
   end
 
   class TokenType
@@ -121,6 +121,7 @@ module Remit
     RECIPIENT = 'Recipient'
     SETUP_PREPAID = 'SetupPrepaid'
     SETUP_POSTPAID = 'SetupPostpaid'
+    EDIT_TOKEN = 'EditToken'
   end
 
   class PipelineStatusCode
@@ -134,17 +135,13 @@ module Remit
     PAYMENT_METHOD_UNSUPPORTED  = 'NP'  # account doesn't support requested payment method
     INVALID_CALLER    = 'NM'  # you are not a valid 3rd party caller to the transaction
     SUCCESS_RECIPIENT_TOKEN_INSTALLED = 'SR'
+    SUCCESS_NO_CHANGE = 'SU'  # the existing token was not changed
   end
 
   module RequestTypes
     class Amount < Remit::Request
       parameter :amount
       parameter :currency_code
-    end
-
-    class TemporaryDeclinePolicy < Remit::Request
-      parameter :temporary_decline_policy_type
-      parameter :implicit_retry_timeout_in_mins
     end
 
     class DescriptorPolicy < Remit::Request
