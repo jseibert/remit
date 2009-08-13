@@ -184,7 +184,7 @@ module Remit
     end
 
     def get_multi_use_pipeline(options)
-      self.get_pipeline(MultiUsePipeline, options)
+      self.get_pipeline(MultiUsePipeline, {:version => Date.new(2009, 1, 9).to_s}.merge(options))
     end
 
     def get_recipient_pipeline(options)
