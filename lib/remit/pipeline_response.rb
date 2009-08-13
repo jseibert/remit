@@ -41,7 +41,7 @@ module Remit
     end
     
     def signature_key
-      :awsSignature
+      :signature
     end
 
     def request_query(reload = false)
@@ -57,7 +57,7 @@ module Remit
     def correct_signature
       query_params = request_query.clone
       query_params.delete(signature_key)
-      Remit::SignedQuery.signature(FPS_SECRET_KEY,query_params)
+      Remit::SignedQuery.signature(@secret_key,query_params)
     end
     private :correct_signature
   end
