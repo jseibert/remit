@@ -26,18 +26,19 @@ module Remit
   class Response < BaseResponse
     parameter :request_id
 
-    attr_accessor :status
     attr_accessor :errors
+    attr_accessor :xml
 
     def initialize(xml)
       super
-
+      
+      @xml = xml
+      @errors = []
       if is?(:Response) && has?(:Errors)
         @errors = elements(:Errors).collect do |error|
           Error.new(error)
         end
       else
-        @status = text_value(element(:Status))
         @errors = elements('Errors/Errors').collect do |error|
           ServiceError.new(error)
         end unless successful?
@@ -45,7 +46,7 @@ module Remit
     end
 
     def successful?
-      @status == ResponseStatus::SUCCESS
+      @errors.empty?
     end
 
     def node_name(name, namespace=nil)
